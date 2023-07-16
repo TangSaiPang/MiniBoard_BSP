@@ -22,62 +22,62 @@ void DEBUG_USART1_Init(void)
 	USART1_CLK_ENABLE;
 	USART1_GPIO_CLK_ENABLE;
 	/**USART1 GPIO Configuration
-  PA9   ------> USART1_TX
-  PA10   ------> USART1_RX
-  */
+	   PA9   ------> USART1_TX
+	   PA10   ------> USART1_RX
+	*/
 	
 	GPIO_InitStruct.Pin = 				USART1_TX_Pin;
 	GPIO_InitStruct.Mode = 				LL_GPIO_MODE_ALTERNATE;
 	GPIO_InitStruct.Speed = 			LL_GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.OutputType = 	LL_GPIO_OUTPUT_PUSHPULL;
-  LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	GPIO_InitStruct.OutputType = 	LL_GPIO_OUTPUT_PUSHPULL;
+	LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 	
 	GPIO_InitStruct.Pin = 				USART1_RX_Pin;
-  GPIO_InitStruct.Mode = 				LL_GPIO_MODE_FLOATING;
-  LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+	GPIO_InitStruct.Mode = 				LL_GPIO_MODE_FLOATING;
+	LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 	
 	USART_InitStruct.BaudRate = 						USART1_BaudRate;
-  USART_InitStruct.DataWidth = 						LL_USART_DATAWIDTH_8B;
-  USART_InitStruct.StopBits = 						LL_USART_STOPBITS_1;
-  USART_InitStruct.Parity = 							LL_USART_PARITY_NONE;
-  USART_InitStruct.TransferDirection = 		LL_USART_DIRECTION_TX_RX;
-  USART_InitStruct.HardwareFlowControl = 	LL_USART_HWCONTROL_NONE;
-  USART_InitStruct.OverSampling = 				LL_USART_OVERSAMPLING_16;
-  LL_USART_Init(USART1, &USART_InitStruct);
-  LL_USART_ConfigAsyncMode(USART1);
-  LL_USART_Enable(USART1);
+	USART_InitStruct.DataWidth = 						LL_USART_DATAWIDTH_8B;
+	USART_InitStruct.StopBits = 						LL_USART_STOPBITS_1;
+	USART_InitStruct.Parity = 							LL_USART_PARITY_NONE;
+	USART_InitStruct.TransferDirection = 		LL_USART_DIRECTION_TX_RX;
+	USART_InitStruct.HardwareFlowControl = 	LL_USART_HWCONTROL_NONE;
+	USART_InitStruct.OverSampling = 				LL_USART_OVERSAMPLING_16;
+	LL_USART_Init(USART1, &USART_InitStruct);
+	LL_USART_ConfigAsyncMode(USART1);
+	LL_USART_Enable(USART1);
 }
 
 
 /**
-	* º¯Êı¹¦ÄÜ: ·¢ËÍ×Ö½Ú³¤¶ÈÎª8Î»µÄ×Ö·û´®
-  * ÊäÈë²ÎÊı: Í¨ĞÅ´®¿Ú£¬»º³åÇøÖ¸Õë£¬Êı¾İ³¤¶È
-  * ·µ »Ø Öµ: ÎŞ
-  * Ëµ    Ã÷: 
+  * å‡½æ•°åŠŸèƒ½: å‘é€å­—èŠ‚é•¿åº¦ä¸º8ä½çš„å­—ç¬¦ä¸²
+  * è¾“å…¥å‚æ•°: é€šä¿¡ä¸²å£ï¼Œç¼“å†²åŒºæŒ‡é’ˆï¼Œæ•°æ®é•¿åº¦
+  * è¿” å› å€¼: æ— 
+  * è¯´    æ˜: 
   */
 void USARTx_Tx_Data(USART_TypeDef * UART, uint8_t *p_data, uint32_t size)
 {
 	while(size)
 	{
-    while(!LL_USART_IsActiveFlag_TXE(UART)){}//µÈ´ı·¢ËÍÎª¿Õ
+		while(!LL_USART_IsActiveFlag_TXE(UART)){}//ç­‰å¾…å‘é€ä¸ºç©º
 		LL_USART_TransmitData8(UART,*p_data);	
 		size--;
 		p_data++;
 	}
-	while(LL_USART_IsActiveFlag_TC(UART)==RESET){}//µÈ´ı·¢ËÍÍê³É
+	while(LL_USART_IsActiveFlag_TC(UART)==RESET){}//ç­‰å¾…å‘é€å®Œæˆ
 }
 
 /**
-	* º¯Êı¹¦ÄÜ: ½ÓÊÕ×Ö½Ú³¤¶ÈÎª8Î»µÄ×Ö·û´®
-  * ÊäÈë²ÎÊı: »º³åÇøÖ¸Õë£¬Êı¾İ³¤¶È
-  * ·µ »Ø Öµ: ÎŞ
-  * Ëµ    Ã÷: 
+  * å‡½æ•°åŠŸèƒ½: æ¥æ”¶å­—èŠ‚é•¿åº¦ä¸º8ä½çš„å­—ç¬¦ä¸²
+  * è¾“å…¥å‚æ•°: ç¼“å†²åŒºæŒ‡é’ˆï¼Œæ•°æ®é•¿åº¦
+  * è¿” å› å€¼: æ— 
+  * è¯´    æ˜: 
   */
 void USARTx_Rx_Data(USART_TypeDef * UART, uint8_t *p_data, uint32_t size)
 {
 	while(size)
 	{
-		while(!LL_USART_IsActiveFlag_RXNE(UART)){}  //RXNEÎª1Ê±£¬ÉÏÒ»Êı¾İÒÑ½ÓÊÕ²¢¿É¶ÁÈ¡			
+		while(!LL_USART_IsActiveFlag_RXNE(UART)){}  //RXNEä¸º1æ—¶ï¼Œä¸Šä¸€æ•°æ®å·²æ¥æ”¶å¹¶å¯è¯»å–			
 		*p_data = LL_USART_ReceiveData8(UART);
 		size--;
 		p_data++;
