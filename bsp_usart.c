@@ -84,7 +84,6 @@ void USARTx_Rx_Data(USART_TypeDef * UART, uint8_t *p_data, uint32_t size)
 	}
 }
 
-
 PUTCHAR_PROTOTYPE
 {
 	USARTx_Tx_Data(USART1, (uint8_t *)&ch, 1);
@@ -97,4 +96,3 @@ GETCHAR_PROTOTYPE
 	USARTx_Rx_Data(USART1, &ch, 1);
 	return ch;
 }
-
